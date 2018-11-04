@@ -1,0 +1,14 @@
+---
+- name: Include OS family-specific variables
+  include_vars: "../defaults/{{ ansible_os_family | lower }}.yml"
+
+- name: Get package facts
+  package_facts:
+
+- import_tasks: install.yml
+  when: |
+    ansible_facts["packages"]["amazon-cloudwatch-agent"] is not defined
+
+- import_tasks: configure.yml
+
+- import_tasks: cleanup.yml

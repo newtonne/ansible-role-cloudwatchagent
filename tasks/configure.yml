@@ -1,0 +1,37 @@
+---
+- name: Ensure json config file is in place and is valid
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ cwa_config_dir }}/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+    validate: |
+      /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl
+      -a fetch-config -c file:%s -m {{ cwa_mode }}
+  notify: restart cwa
+  with_items:
+    - amazon-cloudwatch-agent.json
+
+- name: Ensure service is started and enabled
+  service:
+    name: amazon-cloudwatch-agent
+    state: started
+    enabled: true
+
+- name: Configure log rotation
+  copy:
+    dest: /etc/logrotate.d/cloudwatch-agent
+    owner: root
+    group: root
+    mode: 0644
+    content: |
+      # Ansible managed
+
+      {{ cwa_logfile }} {
+        size 50M
+        rotate 8
+        compress
+        copytruncate
+        missingok
+      }

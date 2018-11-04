@@ -1,0 +1,25 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+
+  vars:
+    # Testing is outside ec2, so must define mode accordingly
+    cwa_mode: onPremise
+
+  pre_tasks:
+    # Ensure region is configured so that service will start
+    - name: Create .aws directory
+      file:
+        path: /root/.aws
+        state: directory
+
+    - name: Create aws config file
+      copy:
+        dest: /root/.aws/config
+        content: |
+          [AmazonCloudWatchAgent]
+          region = us-west-1
+
+  roles:
+    - role: newtonne.cloudwatchagent

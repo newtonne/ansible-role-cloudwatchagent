@@ -1,0 +1,4 @@
+---
+cwa_download_url: https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/amd64/latest
+cwa_pkg_file: amazon-cloudwatch-agent.deb
+cwa_sig_file: amazon-cloudwatch-agent.deb.sig

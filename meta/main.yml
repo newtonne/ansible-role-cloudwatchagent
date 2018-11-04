@@ -1,0 +1,26 @@
+---
+dependencies: []
+
+galaxy_info:
+  author: newtonne
+  role_name: cloudwatchagent
+  description: Installs and configures the Amazon Unified CloudWatch Agent
+
+  license: MIT
+
+  min_ansible_version: 2.4
+
+  platforms:
+    - name: EL
+      versions:
+        - 7
+    - name: Ubuntu
+      versions:
+        - xenial
+
+  galaxy_tags:
+    - monitoring
+    - cloudwatch
+    - aws
+    - cloud
+    - system

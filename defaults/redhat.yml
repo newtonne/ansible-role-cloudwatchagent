@@ -1,0 +1,4 @@
+---
+cwa_download_url: https://s3.amazonaws.com/amazoncloudwatch-agent/redhat/amd64/latest
+cwa_pkg_file: amazon-cloudwatch-agent.rpm
+cwa_sig_file: amazon-cloudwatch-agent.rpm.sig

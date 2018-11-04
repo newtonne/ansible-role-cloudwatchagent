@@ -1,0 +1,42 @@
+---
+- name: Download CloudWatch Agent GPG public key
+  get_url:
+    url: "{{ cwa_gpg_url }}/amazon-cloudwatch-agent.gpg"
+    dest: /tmp
+
+- name: Verify GPG public key against known fingerprint
+  shell: |
+    gpg --with-colons --with-fingerprint /tmp/amazon-cloudwatch-agent.gpg |
+    awk -F: '$1 == "fpr" {print $10}'
+  register: cwa_gpg_verify
+  changed_when: false
+  failed_when: cwa_gpg_verify.stdout != cwa_gpg_fingerprint
+
+- name: Import GPG public key
+  command: gpg --import /tmp/amazon-cloudwatch-agent.gpg
+  register: cwa_gpg_import
+  changed_when: "'not changed' not in cwa_gpg_import.stderr"
+
+- name: Download CloudWatch Agent and GPG sig file
+  get_url:
+    url: "{{ cwa_download_url }}/{{ item }}"
+    dest: /tmp
+  with_items:
+    - "{{ cwa_pkg_file }}"
+    - "{{ cwa_sig_file }}"
+
+- name: Verify download against GPG sig file
+  command: gpg --verify {{ cwa_sig_file }} {{ cwa_pkg_file }}
+  args:
+    chdir: /tmp
+  changed_when: false
+
+- name: Install CloudWatch Agent (Debian)
+  apt:
+    deb: /tmp/{{ cwa_pkg_file }}
+  when: ansible_os_family == "Debian"
+
+- name: Install CloudWatch Agent (RedHat)
+  yum:
+    name: /tmp/{{ cwa_pkg_file }}
+  when: ansible_os_family == "RedHat"
