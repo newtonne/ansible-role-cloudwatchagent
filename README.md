@@ -1,6 +1,8 @@
 Ansible Role: CloudWatch Agent
 ==============================
 
+[![Build Status](https://travis-ci.org/newtonne/ansible-role-cloudwatchagent.svg?branch=master)](https://travis-ci.org/newtonne/ansible-role-cloudwatchagent)
+
 Installs and configures the [AWS Unified CloudWatch Agent](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Install-CloudWatch-Agent.html).
 
 Requirements
